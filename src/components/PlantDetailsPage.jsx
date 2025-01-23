@@ -109,12 +109,19 @@ const PlantDetailsPage = () => {
                 {plant.images.length > 1 ? (
                     <Slider {...sliderSettings}>
                         {plant.images.map((img, index) => (
-                            <div key={img.id} style={{padding: '0 10px'}}>
+                            <div key={img.id} style={{padding: '0 10px', textAlign: 'center'}}>
                                 <img
                                     src={`http://127.0.0.1:5000${img.image_url}`}
                                     alt={`Plant ${index}`}
-                                    className="img-fluid rounded shadow"
-                                    style={{maxHeight: '300px', width: '100%', objectFit: 'cover'}}
+                                    className="gallery-image"
+                                    style={{
+                                        maxHeight: '400px',  // Set a maximum height
+                                        maxWidth: '100%',    // Ensure it fits the container width
+                                        objectFit: 'contain', // Maintain aspect ratio
+                                        borderRadius: '10px',
+                                        display: 'block',
+                                        margin: '0 auto'
+                                    }}
                                 />
                             </div>
                         ))}

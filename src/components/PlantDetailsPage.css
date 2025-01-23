@@ -24,3 +24,32 @@
     box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
 }
 
+.gallery-image {
+    max-width: 100%;       /* Ensures the image doesn't exceed container width */
+    max-height: 400px;     /* Limit the image height to avoid overflow */
+    width: auto;           /* Maintain the original aspect ratio */
+    height: auto;          /* Maintain the original aspect ratio */
+    object-fit: contain;   /* Ensures the whole image fits without being cropped */
+    border-radius: 10px;   /* Optional rounded corners for aesthetics */
+    display: block;        /* Centers the image in the div */
+    margin: 0 auto;        /* Centers the image horizontally */
+}
+
+.gallery-container {
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .gallery-image {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-image {
+        max-height: 200px;
+    }
+}
+
