@@ -42,12 +42,22 @@ const PlantListPage = () => {
 
             <div className="row">
                 {plants.map((plant) => (
-                    <div className="col-md-4 mb-4" key={plant.id}>
+                    <div
+                        className="col-md-4 mb-4"
+                        key={plant.id}
+                        onClick={() => navigate(`/plant/${plant.id}`)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <div className="card shadow-sm">
-                            <img src={`http://127.0.0.1:5000${plant.main_image_url}`} className="card-img-top" alt={plant.name} />
-                            <div className="card-body">
+                            <img
+                                src={plant.main_image_url ? `http://127.0.0.1:5000${plant.main_image_url}` : '/static/images/default.jpg'}
+                                className="card-img-top"
+                                alt={plant.name}
+                                style={{ height: '250px', objectFit: 'cover' }}
+                                onError={(e) => e.target.src='/static/images/default.jpg'}
+                            />
+                            <div className="card-body text-center">
                                 <h5 className="card-title">{plant.name}</h5>
-                                <p className="card-text">{plant.description}</p>
                             </div>
                         </div>
                     </div>
