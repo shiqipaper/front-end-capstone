@@ -1,0 +1,16 @@
+.navbar {
+    font-size: 1.1rem;
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-nav .nav-link {
+    margin-right: 10px;
+}
+
+.navbar .btn-outline-light {
+    margin-left: 10px;
+}
