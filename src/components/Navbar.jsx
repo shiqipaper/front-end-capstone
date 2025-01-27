@@ -13,7 +13,7 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
             <div className="container">
-                <Link className="navbar-brand" to="/">PlantApp</Link>
+                <Link className="navbar-brand" to="/">PlantFinder</Link>
                 <button
                     className="navbar-toggler"
                     type="button"

@@ -45,7 +45,7 @@ const PlantListPage = () => {
                     <div
                         className="col-md-4 mb-4"
                         key={plant.id}
-                        onClick={() => navigate(`/plant/${plant.id}`)}
+                        onClick={() => navigate(`/plants/${plant.id}`)}
                         style={{ cursor: 'pointer' }}
                     >
                         <div className="card shadow-sm">

@@ -15,7 +15,7 @@ const RegisterPage = () => {
         try {
             const response = await registerUser(user);
             localStorage.setItem('token', response.data.access_token);
-            navigate('/user-management');
+            navigate('/');
         } catch (error) {
             alert('Error during registration');
         }

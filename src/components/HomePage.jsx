@@ -15,7 +15,7 @@ const HomePage = () => {
 
     return (
         <div className="container text-center mt-4">
-            <h1 className="mb-4">Welcome to PlantApp</h1>
+            <h1 className="mb-4">Welcome to PlantFinder</h1>
             <div className="row">
                 {plants.map((plant) => (
                     <div className="col-md-4 mb-4" key={plant.id}>

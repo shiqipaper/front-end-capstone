@@ -16,7 +16,7 @@ const LoginPage = () => {
         try {
             const response = await loginUser(credentials);
             localStorage.setItem('token', response.data.access_token);
-            navigate('/user-management');
+            navigate('/');
         } catch (error) {
             alert('Invalid credentials');
         }

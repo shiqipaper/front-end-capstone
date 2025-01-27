@@ -14,12 +14,12 @@ const PlantDetailsPage = () => {
     const [comments, setComments] = useState([]);
     const [error, setError] = useState('');
     const [showQR, setShowQR] = useState(false);
-    const plantUrl = `${window.location.origin}/plant/${id}`;
+    const plantUrl = `${window.location.origin}/plants/${id}`;
 
     useEffect(() => {
         const fetchPlantDetails = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/plant/${id}`);
+                const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
                 setPlant(response.data);
                 setComments(response.data.comments || []);
             } catch (error) {
@@ -37,7 +37,7 @@ const PlantDetailsPage = () => {
     useEffect(() => {
         const fetchPlantDetails = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/plant/${id}`);
+                const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
                 setPlant(response.data);
                 setComments(response.data.comments || []);
             } catch (error) {
@@ -56,7 +56,7 @@ const PlantDetailsPage = () => {
             }
 
             const response = await axios.post(
-                `http://127.0.0.1:5000/plant/${id}/comments`,
+                `http://127.0.0.1:5000/plants/${id}/comments`,
                 {content: comment},
                 {
                     headers: {
