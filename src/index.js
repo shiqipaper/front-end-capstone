@@ -1,15 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+// Import route components
+import Root from './routes/Root';
+import ErrorPage from './routes/ErrorPage';
+import PlantListPage, { loader as plantListLoader } from './components/PlantListPage';
+import PlantDetailsPage from './components/PlantDetailsPage';
+import LoginPage, { action as loginAction } from './components/LoginPage';
+import RegisterPage, { action as registerAction } from './components/RegisterPage';
+import Logout, { action as logoutAction } from './routes/Logout';
+import UserManagement, {
+  loader as userManagementLoader,
+  action as userManagementAction,
+} from './components/UserManagement';
+// Create the router
+const router = createBrowserRouter([
+  {
+    // The Root route is your “layout route” that contains Navbar, etc.
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,           // Matches "/"
+        element: <PlantListPage />,
+        loader: plantListLoader,
+      },
+      {
+        path: 'plants/:id',
+        element: <PlantDetailsPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+        action: loginAction,   // Attach the `action` you exported
+      },
+      {
+        path: 'register',
+        element: <RegisterPage />,
+        action: registerAction,
+      },
+      {
+        path: 'user-management',
+        element: <UserManagement />,
+        loader: userManagementLoader,
+        action: userManagementAction,
+      },
+        {
+        path: 'logout',
+        action: logoutAction, // attach the logout action
+      },
+    ],
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
 );
-

@@ -1,39 +1,72 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Form, useActionData, redirect } from 'react-router-dom';
 import { loginUser } from '../services/api';
 import './Auth.css';
 
+/**
+ * 1) The action:
+ *    - Parses the username/password from form submission
+ *    - Calls `loginUser` API
+ *    - Stores token and redirects, or returns an error message
+ */
+export async function action({ request }) {
+  const formData = await request.formData();
+  const credentials = {
+    username: formData.get('username'),
+    password: formData.get('password'),
+  };
+
+  try {
+    const response = await loginUser(credentials);
+    localStorage.setItem('token', response.data.access_token);
+    return redirect('/'); // e.g. go to homepage
+  } catch (error) {
+    // Return an error object for the component to display
+    return { error: 'Invalid credentials' };
+  }
+}
+
+/**
+ * 2) The component:
+ *    - Uses `<Form method="post">` to trigger the action
+ *    - Accesses any returned error via `useActionData()`
+ */
 const LoginPage = () => {
-    const [credentials, setCredentials] = useState({ username: '', password: '' });
-    const navigate = useNavigate();
+  const actionData = useActionData();
 
-    const handleChange = (e) => {
-        setCredentials({ ...credentials, [e.target.name]: e.target.value });
-    };
+  return (
+    <div className="auth-container">
+      <div className="auth-form">
+        <h2>Login</h2>
+        {/* method="post" will invoke the `action` when the user submits */}
+        <Form method="post">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+            className="form-control"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            className="form-control"
+          />
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await loginUser(credentials);
-            localStorage.setItem('token', response.data.access_token);
-            navigate('/');
-        } catch (error) {
-            alert('Invalid credentials');
-        }
-    };
+          {/* Show error from action, if any */}
+          {actionData?.error && (
+            <p style={{ color: 'red' }}>{actionData.error}</p>
+          )}
 
-    return (
-        <div className="auth-container">
-            <div className="auth-form">
-                <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <input type="text" name="username" placeholder="Username" onChange={handleChange} required className="form-control"/>
-                    <input type="password" name="password" placeholder="Password" onChange={handleChange} required className="form-control"/>
-                    <button type="submit" className="btn btn-primary w-100">Login</button>
-                </form>
-            </div>
-        </div>
-    );
+          <button type="submit" className="btn btn-primary w-100">
+            Login
+          </button>
+        </Form>
+      </div>
+    </div>
+  );
 };
 
 export default LoginPage;
