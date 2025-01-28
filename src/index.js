@@ -9,10 +9,13 @@ import {
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
 import PlantListPage, { loader as plantListLoader } from './components/PlantListPage';
-import PlantDetailsPage from './components/PlantDetailsPage';
+import PlantDetailsPage, {
+  loader as plantDetailsLoader,
+  action as plantDetailsAction
+} from './components/PlantDetailsPage';
 import LoginPage, { action as loginAction } from './components/LoginPage';
 import RegisterPage, { action as registerAction } from './components/RegisterPage';
-import Logout, { action as logoutAction } from './routes/Logout';
+import { action as logoutAction } from './routes/Logout';
 import UserManagement, {
   loader as userManagementLoader,
   action as userManagementAction,
@@ -33,6 +36,8 @@ const router = createBrowserRouter([
       {
         path: 'plants/:id',
         element: <PlantDetailsPage />,
+        loader: plantDetailsLoader,
+        action: plantDetailsAction
       },
       {
         path: 'login',

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Form, useActionData, useLoaderData, useParams} from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -7,73 +7,79 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {QRCodeCanvas, QRCodeSVG} from 'qrcode.react';
 
+export async function loader({ params }) {
+  try {
+    const response = await axios.get(`http://127.0.0.1:5000/plants/${params.id}`);
+    return response.data;
+  } catch (error) {
+    throw new Response('Error fetching plant details', { status: 500 });
+  }
+}
+
+export async function action({ params, request }) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return { error: 'User not authenticated' };
+  }
+
+  const formData = await request.formData();
+  const content = formData.get('comment');
+
+  try {
+    const response = await axios.post(
+      `http://127.0.0.1:5000/plants/${params.id}/comments`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return { newComment: response.data };
+  } catch (err) {
+    return { error: 'Failed to post comment. Please log in.' };
+  }
+}
+
 const PlantDetailsPage = () => {
-    const {id} = useParams();
-    const [plant, setPlant] = useState(null);
-    const [comment, setComment] = useState('');
-    const [comments, setComments] = useState([]);
-    const [error, setError] = useState('');
-    const [showQR, setShowQR] = useState(false);
-    const plantUrl = `${window.location.origin}/plants/${id}`;
+      const loaderData = useLoaderData();
+  const actionData = useActionData();
+  const { id } = useParams();
 
-    useEffect(() => {
-        const fetchPlantDetails = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
-                setPlant(response.data);
-                setComments(response.data.comments || []);
-            } catch (error) {
-                console.error('Error fetching plant details:', error);
-            }
-        };
-        fetchPlantDetails();
+  const [plant, setPlant] = useState(loaderData);
+  const [comments, setComments] = useState(loaderData.comments || []);
+  const [error, setError] = useState('');
+  const [commentInput, setCommentInput] = useState('');
+  const [showQR, setShowQR] = useState(false);
 
-        // Poll for new comments every 10 seconds
-        const interval = setInterval(fetchPlantDetails, 10000);
-        return () => clearInterval(interval);
-    }, [id]);
+  const plantUrl = `${window.location.origin}/plants/${id}`;
 
-
-    useEffect(() => {
-        const fetchPlantDetails = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
-                setPlant(response.data);
-                setComments(response.data.comments || []);
-            } catch (error) {
-                console.error('Error fetching plant details:', error);
-            }
-        };
-        fetchPlantDetails();
-    }, [id]);
-
-    const handleCommentSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                throw new Error('User not authenticated');
-            }
-
-            const response = await axios.post(
-                `http://127.0.0.1:5000/plants/${id}/comments`,
-                {content: comment},
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-            setComments([...comments, response.data]);  // Update comments dynamically
-            setComment('');
-            setError('');
-        } catch (error) {
-            setError('Failed to post comment. Please log in.');
-            console.error('Error posting comment:', error);
-        }
+  // Handle new comment from action
+  useEffect(() => {
+    if (actionData?.newComment) {
+      setComments((prev) => [...prev, actionData.newComment]);
+      setError('');
+      setCommentInput('');
+    }
+    if (actionData?.error) {
+      setError(actionData.error);
+    }
+  }, [actionData]);
+  // Polling effect for updated comments
+  useEffect(() => {
+    const fetchPlantDetails = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
+        setPlant(response.data);
+        setComments(response.data.comments || []);
+      } catch (error) {
+        console.error('Error fetching plant details:', error);
+      }
     };
-
+    const intervalId = setInterval(fetchPlantDetails, 10000);
+    return () => clearInterval(intervalId);
+  }, [id]);
 
     if (!plant) {
         return <div className="container mt-5 text-center">Loading...</div>;
@@ -153,16 +159,19 @@ const PlantDetailsPage = () => {
             <div className="mt-5">
                 <h4>Discussion</h4>
                 {error && <p className="text-danger">{error}</p>}
-                <form onSubmit={handleCommentSubmit} className="mb-3">
-                    <textarea
-                        className="form-control mb-3"
-                        placeholder="Write your comment..."
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        required
-                    ></textarea>
-                    <button type="submit" className="btn btn-primary">Post Comment</button>
-                </form>
+                <Form method="post" className="mb-3">
+          <textarea
+            className="form-control mb-3"
+            name="comment"
+            placeholder="Write your comment..."
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
+            required
+          ></textarea>
+          <button type="submit" className="btn btn-primary">
+            Post Comment
+          </button>
+        </Form>
 
                 <div className="mt-4">
                     <h5>Comments</h5>
