@@ -6,10 +6,11 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {QRCodeCanvas, QRCodeSVG} from 'qrcode.react';
+import {API_URL} from "../services/api";
 
 export async function loader({ params }) {
   try {
-    const response = await axios.get(`http://127.0.0.1:5000/plants/${params.id}`);
+    const response = await axios.get(`${API_URL}/plants/${params.id}`);
     return response.data;
   } catch (error) {
     throw new Response('Error fetching plant details', { status: 500 });
@@ -27,7 +28,7 @@ export async function action({ params, request }) {
 
   try {
     const response = await axios.post(
-      `http://127.0.0.1:5000/plants/${params.id}/comments`,
+      `${API_URL}/plants/${params.id}/comments`,
       { content },
       {
         headers: {
@@ -53,7 +54,7 @@ const PlantDetailsPage = () => {
   const [commentInput, setCommentInput] = useState('');
   const [showQR, setShowQR] = useState(false);
 
-  const plantUrl = `${window.location.origin}/plants/${id}`;
+  const plantUrl = `${API_URL}/plants/${id}`;
 
   // Handle new comment from action
   useEffect(() => {
@@ -70,7 +71,7 @@ const PlantDetailsPage = () => {
   useEffect(() => {
     const fetchPlantDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/plants/${id}`);
+        const response = await axios.get(`${API_URL}/plants/${id}`);
         setPlant(response.data);
         setComments(response.data.comments || []);
       } catch (error) {
@@ -117,7 +118,7 @@ const PlantDetailsPage = () => {
                         {plant.images.map((img, index) => (
                             <div key={img.id} style={{padding: '0 10px', textAlign: 'center'}}>
                                 <img
-                                    src={`http://127.0.0.1:5000${img.image_url}`}
+                                    src={`${API_URL}${img.image_url}`}
                                     alt={`Plant ${index}`}
                                     className="gallery-image"
                                     style={{
@@ -134,7 +135,7 @@ const PlantDetailsPage = () => {
                     </Slider>
                 ) : (
                     <img
-                        src={`http://127.0.0.1:5000${plant.images[0].image_url}`}
+                        src={`${API_URL}${plant.images[0].image_url}`}
                         alt="Plant"
                         className="img-fluid rounded shadow"
                         style={{maxHeight: '300px', maxWidth: '100%', objectFit: 'cover'}}

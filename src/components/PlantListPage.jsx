@@ -8,7 +8,7 @@ import {
   useNavigate,
   redirect,
 } from 'react-router-dom';
-import { getPlants } from '../services/api';
+import {API_URL, getPlants} from '../services/api';
 
 /**
  * Loader function:
@@ -75,7 +75,7 @@ function PlantListPage() {
               <img
                 src={
                   plant.main_image_url
-                    ? `http://127.0.0.1:5000${plant.main_image_url}`
+                    ? `${API_URL}${plant.main_image_url}`
                     : '/static/images/default.jpg'
                 }
                 className="card-img-top"
