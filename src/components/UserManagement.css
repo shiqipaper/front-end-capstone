@@ -1,0 +1,23 @@
+.saved-plants-section {
+  border-top: 1px solid #dee2e6;
+  padding-top: 2rem;
+}
+
+.plant-thumbnail {
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.pagination .page-link {
+  color: #198754;
+}
+
+.pagination .page-link:hover {
+  color: #145c3b;
+}

@@ -43,3 +43,12 @@ export const savePlant = async (plantId, token) => {
     }
   });
 };
+
+export const getSavedPlants = async (token, page = 1, perPage = 10) => {
+  return axios.get(`${API_URL}/users/saved-plants`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    params: { page, per_page: perPage }
+    });
+};
