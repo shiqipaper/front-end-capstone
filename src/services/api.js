@@ -27,3 +27,19 @@ export const updateUserProfile = async (token, updateData) => {
         headers: { Authorization: `Bearer ${token}` }
     });
 };
+
+export const likePlant = async (plantId, token) => {
+  return axios.post(`${API_URL}/plants/${plantId}/like`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};
+
+export const savePlant = async (plantId, token) => {
+  return axios.post(`${API_URL}/plants/${plantId}/save`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};

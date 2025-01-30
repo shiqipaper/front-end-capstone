@@ -15,6 +15,7 @@ import UserManagement, {
   loader as userManagementLoader,
   action as userManagementAction,
 } from './components/UserManagement';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const router = createBrowserRouter([
   {

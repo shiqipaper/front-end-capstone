@@ -53,3 +53,10 @@
     }
 }
 
+.btn-outline-danger, .btn-outline-warning {
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover, .btn-warning:hover {
+  transform: scale(1.05);
+}
