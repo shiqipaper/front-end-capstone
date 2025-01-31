@@ -118,7 +118,7 @@ const PlantDetailsPage = () => {
                         {plant.images.map((img, index) => (
                             <div key={img.id} style={{padding: '0 10px', textAlign: 'center'}}>
                                 <img
-                                    src={`${API_URL}${img.image_url}`}
+                                    src={img.image_url}
                                     alt={`Plant ${index}`}
                                     className="gallery-image"
                                     style={{
@@ -135,7 +135,7 @@ const PlantDetailsPage = () => {
                     </Slider>
                 ) : (
                     <img
-                        src={`${API_URL}${plant.images[0].image_url}`}
+                        src={plant.images[0].image_url}
                         alt="Plant"
                         className="img-fluid rounded shadow"
                         style={{maxHeight: '300px', maxWidth: '100%', objectFit: 'cover'}}

@@ -75,8 +75,6 @@ function PlantListPage() {
               <img
                 src={
                   plant.main_image_url
-                    ? `${API_URL}${plant.main_image_url}`
-                    : '/static/images/default.jpg'
                 }
                 className="card-img-top"
                 alt={plant.name}
