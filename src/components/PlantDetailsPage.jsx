@@ -54,7 +54,9 @@ const PlantDetailsPage = () => {
   const [commentInput, setCommentInput] = useState('');
   const [showQR, setShowQR] = useState(false);
 
-  const plantUrl = `${API_URL}/plants/${id}`;
+  const QR_CODE_URL = process.env.REACT_APP_QR_CODE_URL || 'http://127.0.0.1:5000';
+
+  const plantUrl = `${QR_CODE_URL}/plants/${id}`;
 
   // Handle new comment from action
   useEffect(() => {
