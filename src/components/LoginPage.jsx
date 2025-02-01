@@ -3,12 +3,6 @@ import { Form, useActionData, redirect } from 'react-router-dom';
 import { loginUser } from '../services/api';
 import './Auth.css';
 
-/**
- * 1) The action:
- *    - Parses the username/password from form submission
- *    - Calls `loginUser` API
- *    - Stores token and redirects, or returns an error message
- */
 export async function action({ request }) {
   const formData = await request.formData();
   const credentials = {
@@ -26,11 +20,6 @@ export async function action({ request }) {
   }
 }
 
-/**
- * 2) The component:
- *    - Uses `<Form method="post">` to trigger the action
- *    - Accesses any returned error via `useActionData()`
- */
 const LoginPage = () => {
   const actionData = useActionData();
 
@@ -55,7 +44,6 @@ const LoginPage = () => {
             className="form-control"
           />
 
-          {/* Show error from action, if any */}
           {actionData?.error && (
             <p style={{ color: 'red' }}>{actionData.error}</p>
           )}

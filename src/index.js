@@ -1,11 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
-
-// Import route components
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
 import PlantListPage, { loader as plantListLoader } from './components/PlantListPage';
@@ -20,16 +15,15 @@ import UserManagement, {
   loader as userManagementLoader,
   action as userManagementAction,
 } from './components/UserManagement';
-// Create the router
+
 const router = createBrowserRouter([
   {
-    // The Root route is your “layout route” that contains Navbar, etc.
     path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,           // Matches "/"
+        index: true,
         element: <PlantListPage />,
         loader: plantListLoader,
       },
@@ -42,7 +36,7 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
-        action: loginAction,   // Attach the `action` you exported
+        action: loginAction,
       },
       {
         path: 'register',

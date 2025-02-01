@@ -34,10 +34,6 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  {/*
-                    Use Form method="post" pointing to /logout
-                    This will trigger the logout action
-                  */}
                   <Form method="post" action="/logout">
                     <button
                       type="submit"
