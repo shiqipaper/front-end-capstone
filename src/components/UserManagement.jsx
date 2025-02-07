@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, useLoaderData, useActionData } from 'react-router-dom';
 import {API_URL, getSavedPlants, getUserProfile, updateUserProfile} from '../services/api';
 
-// The existing loader:
 export async function loader() {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -12,7 +11,7 @@ export async function loader() {
   try {
     const [profileResponse, savedResponse] = await Promise.all([
       getUserProfile(token),
-      getSavedPlants(token, 1, 6) // Initial page with 6 items
+      getSavedPlants(token, 1, 6)
     ]);
 
     return {
@@ -24,7 +23,6 @@ export async function loader() {
   }
 }
 
-// The updated action:
 export async function action({ request }) {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -36,7 +34,6 @@ export async function action({ request }) {
 
   try {
     await updateUserProfile(token, { email });
-    // Return success
     return { success: 'Profile updated successfully!' };
   } catch (error) {
     return { error: 'Failed to update profile.' };
@@ -80,7 +77,6 @@ const UserManagement = () => {
     <div className="container mt-5">
       <h2>User Dashboard</h2>
       <div className="card p-4">
-        {/* Existing Profile Section */}
         <div className="mb-5">
           <p><strong>Username:</strong> {profile.username}</p>
           <Form method="post">
@@ -102,7 +98,6 @@ const UserManagement = () => {
           </Form>
         </div>
 
-        {/* Saved Plants Section */}
         <div className="saved-plants-section">
           <h4 className="mb-4">Saved Plants</h4>
 
@@ -124,7 +119,7 @@ const UserManagement = () => {
                     <div key={plant.id} className="col">
                       <div className="card h-100 shadow-sm">
                         <img
-                          src={`${API_URL}${plant.main_image_url}` || '/placeholder.jpg'}
+                          src={plant.main_image_url}
                           className="card-img-top plant-thumbnail"
                           alt={plant.name}
                         />
@@ -143,7 +138,6 @@ const UserManagement = () => {
                 </div>
               )}
 
-              {/* Pagination Controls */}
               {totalPages > 1 && (
                 <nav className="mt-4" aria-label="Saved plants pagination">
                   <ul className="pagination justify-content-center">

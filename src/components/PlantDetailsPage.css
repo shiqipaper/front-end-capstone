@@ -25,14 +25,14 @@
 }
 
 .gallery-image {
-    max-width: 100%;       /* Ensures the image doesn't exceed container width */
-    max-height: 400px;     /* Limit the image height to avoid overflow */
-    width: auto;           /* Maintain the original aspect ratio */
-    height: auto;          /* Maintain the original aspect ratio */
-    object-fit: contain;   /* Ensures the whole image fits without being cropped */
-    border-radius: 10px;   /* Optional rounded corners for aesthetics */
-    display: block;        /* Centers the image in the div */
-    margin: 0 auto;        /* Centers the image horizontally */
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
 }
 
 .gallery-container {
@@ -59,4 +59,40 @@
 
 .btn-danger:hover, .btn-warning:hover {
   transform: scale(1.05);
+}
+
+.pagination {
+    margin: 20px 0;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.page-link {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.file-upload-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-upload-wrapper label:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.bi-image {
+  font-size: 1.2rem;
 }

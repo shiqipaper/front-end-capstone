@@ -3,63 +3,64 @@ import ReactDOM from 'react-dom/client';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
-import PlantListPage, { loader as plantListLoader } from './components/PlantListPage';
+import PlantListPage, {loader as plantListLoader} from './components/PlantListPage';
 import PlantDetailsPage, {
   loader as plantDetailsLoader,
   action as plantDetailsAction
 } from './components/PlantDetailsPage';
-import LoginPage, { action as loginAction } from './components/LoginPage';
-import RegisterPage, { action as registerAction } from './components/RegisterPage';
-import { action as logoutAction } from './routes/Logout';
+import LoginPage, {action as loginAction} from './components/LoginPage';
+import RegisterPage, {action as registerAction} from './components/RegisterPage';
+import {action as logoutAction} from './routes/Logout';
 import UserManagement, {
   loader as userManagementLoader,
   action as userManagementAction,
 } from './components/UserManagement';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
-    errorElement: <ErrorPage />,
+    element: <Root/>,
+    errorElement: <ErrorPage/>,
     children: [
       {
         index: true,
-        element: <PlantListPage />,
+        element: <PlantListPage/>,
         loader: plantListLoader,
       },
       {
         path: 'plants/:id',
-        element: <PlantDetailsPage />,
+        element: <PlantDetailsPage/>,
         loader: plantDetailsLoader,
         action: plantDetailsAction
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: <LoginPage/>,
         action: loginAction,
       },
       {
         path: 'register',
-        element: <RegisterPage />,
+        element: <RegisterPage/>,
         action: registerAction,
       },
       {
         path: 'user-management',
-        element: <UserManagement />,
+        element: <UserManagement/>,
         loader: userManagementLoader,
         action: userManagementAction,
       },
-        {
+      {
         path: 'logout',
-        action: logoutAction, // attach the logout action
+        action: logoutAction,
       },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+    <React.StrictMode>
+      <RouterProvider router={router}/>
+    </React.StrictMode>,
 );

@@ -15,7 +15,7 @@ export async function action({ request }) {
     localStorage.setItem('token', response.data.access_token);
     return redirect('/'); // e.g. go to homepage
   } catch (error) {
-    // Return an error object for the component to display
+
     return { error: 'Invalid credentials' };
   }
 }
@@ -27,7 +27,6 @@ const LoginPage = () => {
     <div className="auth-container">
       <div className="auth-form">
         <h2>Login</h2>
-        {/* method="post" will invoke the `action` when the user submits */}
         <Form method="post">
           <input
             type="text"

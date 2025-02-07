@@ -24,22 +24,18 @@ export async function loader({params}) {
 
 export async function action({params, request}) {
     const token = localStorage.getItem('token');
-    if (!token) {
-        return {error: 'User not authenticated'};
-    }
+    if (!token) return {error: 'User not authenticated'};
 
     const formData = await request.formData();
-    const content = formData.get('comment');
 
     try {
         const response = await axios.post(
             `${API_URL}/plants/${params.id}/comments`,
-            {content},
+            formData,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+                }
             }
         );
         return {newComment: response.data};
@@ -57,18 +53,47 @@ const PlantDetailsPage = () => {
     const [comments, setComments] = useState(loaderData.comments || []);
     const [error, setError] = useState('');
     const [commentInput, setCommentInput] = useState('');
+    const [currentCommentPage, setCurrentCommentPage] = useState(1);
+    const [totalCommentPages, setTotalCommentPages] = useState(1);
+    const [totalComments, setTotalComments] = useState(0);
+    const [commentsPerPage] = useState(5);
     const [showQR, setShowQR] = useState(false);
     const [isLiked, setIsLiked] = useState(plant.is_liked || false);
     const [isSaved, setIsSaved] = useState(plant.is_saved || false);
     const [likeCount, setLikeCount] = useState(plant.likes_count || 0);
     const [saveCount, setSaveCount] = useState(plant.saves_count || 0);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [fileError, setFileError] = useState('');
+
     const QR_CODE_URL = process.env.REACT_APP_QR_CODE_URL || 'http://127.0.0.1:5000';
 
     const plantUrl = `${QR_CODE_URL}/plants/${id}`;
     // Handle new comment from action
+    const fetchComments = async (page = 1) => {
+        try {
+            const response = await axios.get(`${API_URL}/plants/${id}/comments`, {
+                params: {
+                    page: page,
+                    per_page: commentsPerPage
+                }
+            });
+            setComments(response.data.comments);
+            setTotalCommentPages(response.data.total_pages);
+            setTotalComments(response.data.total_comments);
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
+    };
+    useEffect(() => {
+        fetchComments(currentCommentPage);
+    }, [currentCommentPage]);
+
     useEffect(() => {
         if (actionData?.newComment) {
-            setComments((prev) => [...prev, actionData.newComment]);
+            // Optimistically add comment and refetch to maintain pagination
+            setComments(prev => [actionData.newComment, ...prev]);
+            setTotalComments(prev => prev + 1);
+            fetchComments(currentCommentPage);
             setError('');
             setCommentInput('');
         }
@@ -82,20 +107,23 @@ const PlantDetailsPage = () => {
             try {
                 const response = await axios.get(`${API_URL}/plants/${id}`);
                 setPlant(response.data);
-                setComments(response.data.comments || []);
-                // Update local state with fresh data
+                // Keep these updates
                 setIsLiked(response.data.is_liked);
                 setIsSaved(response.data.is_saved);
                 setLikeCount(response.data.likes_count);
                 setSaveCount(response.data.saves_count);
+                // Don't update comments here anymore
             } catch (error) {
                 console.error('Error fetching plant details:', error);
             }
         };
 
-        const intervalId = setInterval(fetchPlantDetails, 10000);
+        const intervalId = setInterval(() => {
+            fetchPlantDetails();
+            fetchComments(currentCommentPage);
+        }, 10000);
         return () => clearInterval(intervalId);
-    }, [id]);
+    }, [id, currentCommentPage]);
     const handleLike = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -106,13 +134,11 @@ const PlantDetailsPage = () => {
         const originalIsLiked = isLiked;
         const originalLikeCount = likeCount;
 
-        // Optimistic update
         setIsLiked(!isLiked);
         setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
 
         try {
             await likePlant(id, token);
-            // Sync with server data after successful like
             const response = await axios.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
@@ -133,13 +159,11 @@ const PlantDetailsPage = () => {
         const originalIsSaved = isSaved;
         const originalSaveCount = saveCount;
 
-        // Optimistic update
         setIsSaved(!isSaved);
         setSaveCount(prev => isSaved ? prev - 1 : prev + 1);
 
         try {
             await savePlant(id, token);
-            // Sync with server data after successful save
             const response = await axios.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
@@ -153,15 +177,14 @@ const PlantDetailsPage = () => {
         return <div className="container mt-5 text-center">Loading...</div>;
     }
 
-    // Slider settings for horizontal sliding effect
     const sliderSettings = {
         dots: true,
-        infinite: plant.images.length > 1,  // Disable infinite scroll if only one image
+        infinite: plant.images.length > 1,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        arrows: plant.images.length > 1,  // Hide arrows if only one image
-        autoplay: plant.images.length > 1,  // Disable autoplay if single image
+        arrows: plant.images.length > 1,
+        autoplay: plant.images.length > 1,
         autoplaySpeed: 3000,
         centerMode: false,
         responsive: [
@@ -189,9 +212,9 @@ const PlantDetailsPage = () => {
                                     alt={`Plant ${index}`}
                                     className="gallery-image"
                                     style={{
-                                        maxHeight: '400px',  // Set a maximum height
-                                        maxWidth: '100%',    // Ensure it fits the container width
-                                        objectFit: 'contain', // Maintain aspect ratio
+                                        maxHeight: '400px',
+                                        maxWidth: '100%',
+                                        objectFit: 'contain',
                                         borderRadius: '10px',
                                         display: 'block',
                                         margin: '0 auto'
@@ -219,14 +242,12 @@ const PlantDetailsPage = () => {
                 </button>
                 <button
                     className={`btn ${isLiked ? 'btn-danger' : 'btn-outline-danger'}`}
-                    onClick={handleLike}
-                >
+                    onClick={handleLike}>
                     {isLiked ? '❤️' : '♡'} {likeCount}
                 </button>
                 <button
                     className={`btn ${isSaved ? 'btn-warning' : 'btn-outline-warning'}`}
-                    onClick={handleSave}
-                >
+                    onClick={handleSave}>
                     {isSaved ? '⭐' : '☆'} {saveCount}
                 </button>
             </div>
@@ -239,35 +260,155 @@ const PlantDetailsPage = () => {
             )}
             {error && <p className="text-danger">{error}</p>}
 
-            {/* Discussion Section */}
             <div className="mt-5">
                 <h4>Discussion</h4>
-                <Form method="post" className="mb-3">
-                  <textarea
+                <Form method="post" encType="multipart/form-data" className="mb-4">
+                  <div className="mb-3">
+                    <textarea
                       className="form-control mb-3"
-                      name="comment"
+                      name="content"
                       placeholder="Write your comment..."
                       value={commentInput}
                       onChange={(e) => setCommentInput(e.target.value)}
                       required
-                  ></textarea>
-                    <button type="submit" className="btn btn-primary">
-                        Post Comment
-                    </button>
+                      rows="4"
+                    ></textarea>
+
+                    <div className="file-upload-wrapper">
+                        <input
+                            type="file"
+                            name="image"
+                            id="commentImage"
+                            accept="image/*"
+                            className="d-none"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
+                                        setFileError('File size exceeds 5MB limit');
+                                        e.target.value = ''; // Clear input
+                                        setSelectedFile(null);
+                                    } else {
+                                        setFileError('');
+                                        setSelectedFile(file);
+                                    }
+                                }
+                            }}
+                        />
+                        <label
+                            htmlFor="commentImage"
+                            className="btn btn-outline-secondary d-flex align-items-center gap-2"
+                        >
+                            <i className="bi bi-image"></i>
+                            {selectedFile ? (
+                                <span>{selectedFile.name}</span>
+                            ) : (
+                                <span>Upload Image (JPEG, PNG, GIF)</span>
+                        )}
+                      </label>
+                      {selectedFile && (
+                        <button
+                          type="button"
+                          className="btn btn-link text-danger ms-2"
+                          onClick={() => setSelectedFile(null)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="form-text text-muted mt-1">
+                      Maximum size: 5MB • Supported formats: JPG, PNG, GIF
+                    </div>
+                  </div>
+
+                  <button type="submit" className="btn btn-primary">
+                    Post Comment
+                  </button>
                 </Form>
+                {fileError && (
+                  <div className="text-danger small mt-1">{fileError}</div>
+                )}
 
                 <div className="mt-4">
-                    <h5>Comments</h5>
+                    <h5>Comments ({totalComments})</h5>
                     {comments.length === 0 ? (
                         <p>No comments yet.</p>
                     ) : (
-                        comments.map((c) => (
-                            <div key={c.id} className="border p-3 mb-2 rounded">
-                                <strong>User {c.username}:</strong>
-                                <p>{c.content}</p>
-                                <small className="text-muted">{c.created_at}</small>
+                        <>
+                            {comments.map((c) => (
+                                <div key={c.id} className="border p-3 mb-3 rounded bg-white shadow-sm">
+                                    <div className="d-flex flex-column h-100">
+                                        <div className="mb-2">
+                                            <div className="d-flex align-items-center mb-2">
+                                                <span className="fw-bold text-primary">@{c.username}</span>
+                                                <span className="ms-2 text-muted" style={{fontSize: '0.8rem'}}>
+                                                    {new Date(c.created_at).toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric'
+                                                    })}
+                                                </span>
+                                            </div>
+
+                                            <p className="mb-2 text-dark" style={{lineHeight: '1.4'}}>{c.content}</p>
+
+                                            {c.image_url && (
+                                                <div className="mt-2 mb-3">
+                                                    <img
+                                                        src={c.image_url}
+                                                        alt="Comment attachment"
+                                                        className="img-thumbnail rounded"
+                                                        style={{
+                                                            maxWidth: '300px',
+                                                            maxHeight: '300px',
+                                                            objectFit: 'cover',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            <div className="d-flex justify-content-center mt-4">
+                                <nav>
+                                    <ul className="pagination">
+                                        <li className={`page-item ${currentCommentPage === 1 ? 'disabled' : ''}`}>
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentCommentPage(prev => Math.max(1, prev - 1))}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+
+                                        {Array.from({length: totalCommentPages}, (_, i) => i + 1).map(page => (
+                                            <li key={page}
+                                                className={`page-item ${currentCommentPage === page ? 'active' : ''}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setCurrentCommentPage(page)}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </li>
+                                        ))}
+
+                                        <li className={`page-item ${currentCommentPage === totalCommentPages ? 'disabled' : ''}`}>
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentCommentPage(prev => Math.min(totalCommentPages, prev + 1))}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
-                        ))
+                        </>
                     )}
                 </div>
             </div>

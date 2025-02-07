@@ -7,7 +7,6 @@ const Root = () => {
     <>
       <Navbar />
       <div className="container mt-4">
-        {/* The Outlet renders the matched child route */}
         <Outlet />
       </div>
     </>
