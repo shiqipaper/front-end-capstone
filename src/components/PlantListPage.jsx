@@ -28,29 +28,28 @@ function PlantListPage() {
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4">Plant List</h2>
-      <Form method="get">
-        <input
-          type="text"
-          name="search"
-          defaultValue={search}
-          className="form-control mb-4"
-          placeholder="Search for plants..."
-        />
-      </Form>
+        <Form method="get" className="d-flex mb-4 gap-2">
+            <input
+                type="text"
+                name="search"
+                defaultValue={search}
+                className="form-control flex-grow-1"
+                placeholder="Search for plants..."
+            />
+            <button type="submit" className="btn btn-primary" style={{width: '100px'}}>Search</button>
+        </Form>
 
-      <div className="row">
-        {plants.map((plant) => (
-          <div
-            className="col-md-4 mb-4"
+        <div className="row">
+            {plants.map((plant) => (
+                <div
+                    className="col-md-4 mb-4"
             key={plant.id}
             onClick={() => navigate(`/plants/${plant.id}`)}
             style={{ cursor: 'pointer' }}
           >
             <div className="card shadow-sm">
               <img
-                src={
-                  plant.main_image_url
-                }
+                src={plant.main_image_url}
                 className="card-img-top"
                 alt={plant.name}
                 style={{ height: '250px', objectFit: 'cover' }}

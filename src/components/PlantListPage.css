@@ -1,3 +1,8 @@
+Form.d-flex {
+    width: 100%;
+    justify-content: flex-start;
+}
+
 .card {
     transition: transform 0.3s ease-in-out;
 }
@@ -11,8 +16,13 @@
     object-fit: cover;
 }
 
-input {
-    max-width: 400px;
-    margin: 0 auto;
+input.form-control {
+    max-width: none;
+    margin: 0;
     display: block;
+    flex-grow: 1;
+}
+
+button[type="submit"] {
+    flex-shrink: 0;
 }

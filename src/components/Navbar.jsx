@@ -32,33 +32,38 @@ const Navbar = () => {
             </li>
 
             {isAuthenticated ? (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/user-management">
-                    Dashboard
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Form method="post" action="/logout">
-                    <button
-                      type="submit"
-                      className="btn btn-outline-light nav-link"
-                      style={{ border: 'none', cursor: 'pointer' }}
-                    >
-                      Logout
-                    </button>
-                  </Form>
-                </li>
-              </>
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/user-management">
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Form method="post" action="/logout" className="d-flex">
+                      <button
+                          type="submit"
+                          className="btn btn-link nav-link p-0"
+                          style={{
+                            border: 'none',
+                            cursor: 'pointer',
+                            outline: 'none',
+                            boxShadow: 'none'
+                          }}
+                      >
+                        Logout
+                      </button>
+                    </Form>
+                  </li>
+                </>
             ) : (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login">Login</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/register">Register</Link>
-                </li>
-              </>
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">Login</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/register">Register</Link>
+                  </li>
+                </>
             )}
           </ul>
         </div>
