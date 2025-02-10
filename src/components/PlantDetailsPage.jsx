@@ -234,7 +234,7 @@ const PlantDetailsPage = () => {
                 )}
             </div>
 
-            <div>
+            <div className="text-start">
                 <p className="lead">{plant.description}</p>
             </div>
             <div className="d-flex justify-content-center gap-2 mb-3">
@@ -264,71 +264,71 @@ const PlantDetailsPage = () => {
             <div className="mt-5">
                 <h4>Discussion</h4>
                 <Form method="post" encType="multipart/form-data" className="mb-4">
-                  <div className="mb-3">
+                    <div className="mb-3">
                     <textarea
-                      className="form-control mb-3"
-                      name="content"
-                      placeholder="Write your comment..."
-                      value={commentInput}
-                      onChange={(e) => setCommentInput(e.target.value)}
-                      required
-                      rows="4"
+                        className="form-control mb-3"
+                        name="content"
+                        placeholder="Write your comment..."
+                        value={commentInput}
+                        onChange={(e) => setCommentInput(e.target.value)}
+                        required
+                        rows="4"
                     ></textarea>
 
-                    <div className="file-upload-wrapper">
-                        <input
-                            type="file"
-                            name="image"
-                            id="commentImage"
-                            accept="image/*"
-                            className="d-none"
-                            onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
-                                        setFileError('File size exceeds 5MB limit');
-                                        e.target.value = ''; // Clear input
-                                        setSelectedFile(null);
-                                    } else {
-                                        setFileError('');
-                                        setSelectedFile(file);
+                        <div className="file-upload-wrapper">
+                            <input
+                                type="file"
+                                name="image"
+                                id="commentImage"
+                                accept="image/*"
+                                className="d-none"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
+                                            setFileError('File size exceeds 5MB limit');
+                                            e.target.value = ''; // Clear input
+                                            setSelectedFile(null);
+                                        } else {
+                                            setFileError('');
+                                            setSelectedFile(file);
+                                        }
                                     }
-                                }
-                            }}
-                        />
-                        <label
-                            htmlFor="commentImage"
-                            className="btn btn-outline-secondary d-flex align-items-center gap-2"
-                        >
-                            <i className="bi bi-image"></i>
-                            {selectedFile ? (
-                                <span>{selectedFile.name}</span>
-                            ) : (
-                                <span>Upload Image (JPEG, PNG, GIF)</span>
-                        )}
-                      </label>
-                      {selectedFile && (
-                        <button
-                          type="button"
-                          className="btn btn-link text-danger ms-2"
-                          onClick={() => setSelectedFile(null)}
-                        >
-                          Remove
-                        </button>
-                      )}
+                                }}
+                            />
+                            <label
+                                htmlFor="commentImage"
+                                className="btn btn-outline-secondary d-flex align-items-center gap-2"
+                            >
+                                <i className="bi bi-image"></i>
+                                {selectedFile ? (
+                                    <span>{selectedFile.name}</span>
+                                ) : (
+                                    <span>Upload Image (JPEG, PNG, GIF)</span>
+                                )}
+                            </label>
+                            {selectedFile && (
+                                <button
+                                    type="button"
+                                    className="btn btn-link text-danger ms-2"
+                                    onClick={() => setSelectedFile(null)}
+                                >
+                                    Remove
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="form-text text-muted mt-1">
+                            Maximum size: 5MB • Supported formats: JPG, PNG, GIF
+                        </div>
                     </div>
 
-                    <div className="form-text text-muted mt-1">
-                      Maximum size: 5MB • Supported formats: JPG, PNG, GIF
-                    </div>
-                  </div>
-
-                  <button type="submit" className="btn btn-primary">
-                    Post Comment
-                  </button>
+                    <button type="submit" className="btn btn-primary">
+                        Post Comment
+                    </button>
                 </Form>
                 {fileError && (
-                  <div className="text-danger small mt-1">{fileError}</div>
+                    <div className="text-danger small mt-1">{fileError}</div>
                 )}
 
                 <div className="mt-4">
