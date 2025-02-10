@@ -91,7 +91,6 @@ const PlantDetailsPage = () => {
 
     useEffect(() => {
         if (actionData?.newComment) {
-            // Optimistically add comment and refetch to maintain pagination
             setComments(prev => [actionData.newComment, ...prev]);
             setTotalComments(prev => prev + 1);
             fetchComments(currentCommentPage);
@@ -113,7 +112,6 @@ const PlantDetailsPage = () => {
                 setIsSaved(response.data.is_saved);
                 setLikeCount(response.data.likes_count);
                 setSaveCount(response.data.saves_count);
-                // Don't update comments here anymore
             } catch (error) {
                 console.error('Error fetching plant details:', error);
             }
@@ -143,7 +141,6 @@ const PlantDetailsPage = () => {
             const response = await axios.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
-            // Rollback on error
             setIsLiked(originalIsLiked);
             setLikeCount(originalLikeCount);
             setError('Failed to like plant');
@@ -168,7 +165,6 @@ const PlantDetailsPage = () => {
             const response = await axios.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
-            // Rollback on error
             setIsSaved(originalIsSaved);
             setSaveCount(originalSaveCount);
             setError('Failed to save plant');
@@ -285,9 +281,9 @@ const PlantDetailsPage = () => {
                                 onChange={(e) => {
                                     const file = e.target.files[0];
                                     if (file) {
-                                        if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
+                                        if (file.size > 5 * 1024 * 1024) {
                                             setFileError('File size exceeds 5MB limit');
-                                            e.target.value = ''; // Clear input
+                                            e.target.value = '';
                                             setSelectedFile(null);
                                         } else {
                                             setFileError('');
@@ -352,7 +348,8 @@ const PlantDetailsPage = () => {
                                                 </span>
                                             </div>
 
-                                            <p className="mb-2 text-dark" style={{lineHeight: '1.4'}}>{c.content}</p>
+                                            <p className="mb-2 text-dark comment-content"
+                                               style={{lineHeight: '1.4'}}>{c.content}</p>
 
                                             {c.image_url && (
                                                 <div className="mt-2 mb-3">

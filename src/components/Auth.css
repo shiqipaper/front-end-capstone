@@ -1,8 +1,9 @@
 .auth-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    padding-top: 20px;
+    min-height: calc(100vh - 56px);
 }
 
 .auth-form {
@@ -16,4 +17,10 @@
 
 input {
     margin-bottom: 15px;
+}
+
+@media (max-width: 576px) {
+    .auth-container {
+        padding-top: 80px;
+    }
 }
