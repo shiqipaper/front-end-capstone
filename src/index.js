@@ -5,15 +5,15 @@ import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
 import PlantListPage, {loader as plantListLoader} from './components/PlantListPage';
 import PlantDetailsPage, {
-  loader as plantDetailsLoader,
-  action as plantDetailsAction
+  action as plantDetailsAction,
+  loader as plantDetailsLoader
 } from './components/PlantDetailsPage';
 import LoginPage, {action as loginAction} from './components/LoginPage';
 import RegisterPage, {action as registerAction} from './components/RegisterPage';
 import {action as logoutAction} from './routes/Logout';
 import UserManagement, {
-  loader as userManagementLoader,
   action as userManagementAction,
+  loader as userManagementLoader,
 } from './components/UserManagement';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import "bootstrap-icons/font/bootstrap-icons.css";

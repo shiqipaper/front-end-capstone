@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, useActionData, redirect } from 'react-router-dom';
-import { registerUser } from '../services/api';
+import {Form, redirect, useActionData} from 'react-router-dom';
+import {registerUser} from '../services/api';
 
 export async function action({ request }) {
   const formData = await request.formData();

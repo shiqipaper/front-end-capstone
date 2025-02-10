@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Form, useLoaderData, useActionData } from 'react-router-dom';
-import {API_URL, getSavedPlants, getUserProfile, updateUserProfile} from '../services/api';
+import React, {useState} from 'react';
+import {Form, useActionData, useLoaderData} from 'react-router-dom';
+import {getSavedPlants, getUserProfile, updateUserProfile} from '../services/api';
 
 export async function loader() {
   const token = localStorage.getItem('token');

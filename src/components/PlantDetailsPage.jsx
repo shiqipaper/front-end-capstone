@@ -68,7 +68,7 @@ const PlantDetailsPage = () => {
     const QR_CODE_URL = process.env.REACT_APP_QR_CODE_URL || 'http://127.0.0.1:5000';
 
     const plantUrl = `${QR_CODE_URL}/plants/${id}`;
-    // Handle new comment from action
+
     const fetchComments = async (page = 1) => {
         try {
             const response = await axios.get(`${API_URL}/plants/${id}/comments`, {
@@ -101,7 +101,7 @@ const PlantDetailsPage = () => {
             setError(actionData.error);
         }
     }, [actionData]);
-    // Polling effect for updated comments
+
     useEffect(() => {
         const fetchPlantDetails = async () => {
             try {
@@ -248,7 +248,7 @@ const PlantDetailsPage = () => {
                 <button
                     className={`btn ${isSaved ? 'btn-warning' : 'btn-outline-warning'}`}
                     onClick={handleSave}>
-                    {isSaved ? '⭐' : '☆'} {saveCount}
+                    {isSaved ? '⭐' : '☆'}
                 </button>
             </div>
 

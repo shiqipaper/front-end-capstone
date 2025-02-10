@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  useLoaderData,
-  Form,
-  Link,
-  useNavigate,
-} from 'react-router-dom';
-import {API_URL, getPlants} from '../services/api';
+import {Form, Link, useLoaderData, useNavigate,} from 'react-router-dom';
+import {getPlants} from '../services/api';
 
 export async function loader({ request }) {
   const url = new URL(request.url);

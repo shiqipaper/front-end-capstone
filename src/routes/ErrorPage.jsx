@@ -7,7 +7,6 @@ export default function ErrorPage() {
   const navigate = useNavigate();
   console.error(error);
 
-  // Handle specific error cases
   const isUnauthorized = error.status === 401;
   const isNotFound = error.status === 404;
   const isServerError = error.status >= 500;

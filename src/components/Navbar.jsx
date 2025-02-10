@@ -1,8 +1,13 @@
-import React from 'react';
-import { Link, Form } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, Form, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-  const isAuthenticated = !!localStorage.getItem('token');
+  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+
+  useEffect(() => {
+    setIsAuthenticated(!!localStorage.getItem('token'));
+  }, [location]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
