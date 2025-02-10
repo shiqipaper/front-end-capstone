@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Form, useLocation } from 'react-router-dom';
-
+import './Navbar.css';
 const Navbar = () => {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));

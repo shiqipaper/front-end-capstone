@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {QRCodeSVG} from 'qrcode.react';
 import {API_URL, likePlant, savePlant} from "../services/api";
+import './PlantDetailsPage.css';
 
 export async function loader({params}) {
     const token = localStorage.getItem('token');
@@ -233,7 +234,7 @@ const PlantDetailsPage = () => {
                 )}
             </div>
 
-            <div className="text-center">
+            <div>
                 <p className="lead">{plant.description}</p>
             </div>
             <div className="d-flex justify-content-center gap-2 mb-3">

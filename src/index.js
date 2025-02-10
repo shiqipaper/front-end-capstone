@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap-icons/font/bootstrap-icons.css";
+import './index.css';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
@@ -15,8 +19,7 @@ import UserManagement, {
   action as userManagementAction,
   loader as userManagementLoader,
 } from './components/UserManagement';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import "bootstrap-icons/font/bootstrap-icons.css";
+
 
 const router = createBrowserRouter([
   {

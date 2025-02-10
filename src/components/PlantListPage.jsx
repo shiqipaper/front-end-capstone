@@ -1,6 +1,7 @@
 import React from 'react';
 import {Form, Link, useLoaderData, useNavigate,} from 'react-router-dom';
 import {getPlants} from '../services/api';
+import './PlantListPage.css';
 
 export async function loader({ request }) {
   const url = new URL(request.url);

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Form, useActionData, useLoaderData} from 'react-router-dom';
 import {getSavedPlants, getUserProfile, updateUserProfile} from '../services/api';
+import './UserManagement.css';
 
 export async function loader() {
   const token = localStorage.getItem('token');
