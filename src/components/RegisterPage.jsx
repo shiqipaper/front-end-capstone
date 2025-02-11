@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Form, redirect, useActionData} from 'react-router-dom';
-import {registerUser} from '../services/api';
+import {getUserProfile, registerUser} from '../services/api';
 import './Auth.css';
 
 export async function action({ request }) {
@@ -13,14 +13,28 @@ export async function action({ request }) {
   };
 
   try {
-    const response = await registerUser(user);
-    localStorage.setItem('token', response.data.access_token);
+    const registrationResponse = await registerUser(user);
+    const token = registrationResponse.data.access_token;
+    localStorage.setItem('token', token);
+
+    const profileResponse = await getUserProfile(token);
+    localStorage.setItem('user', JSON.stringify(profileResponse.data));
 
     return redirect('/');
   } catch (error) {
-    return { error: 'Error during registration' };
+    return { error: error.response?.data?.message || 'Error during registration' };
   }
 }
+
+//   try {
+//     const response = await registerUser(user);
+//     localStorage.setItem('token', response.data.access_token);
+//
+//     return redirect('/');
+//   } catch (error) {
+//     return { error: 'Error during registration' };
+//   }
+// }
 
 const RegisterPage = () => {
   const actionData = useActionData();

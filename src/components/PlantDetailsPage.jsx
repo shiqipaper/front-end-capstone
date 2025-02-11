@@ -107,7 +107,6 @@ const PlantDetailsPage = () => {
             try {
                 const response = await axios.get(`${API_URL}/plants/${id}`);
                 setPlant(response.data);
-                // Keep these updates
                 setIsLiked(response.data.is_liked);
                 setIsSaved(response.data.is_saved);
                 setLikeCount(response.data.likes_count);

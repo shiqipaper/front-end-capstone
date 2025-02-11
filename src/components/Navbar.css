@@ -15,3 +15,14 @@
 .navbar .btn-outline-light {
     margin-left: 10px;
 }
+
+.navbar-nav .nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .btn-link.nav-link {
+  padding: 0.5rem 1rem;
+  line-height: 1.5;
+  font-size: 1.1rem;
+}

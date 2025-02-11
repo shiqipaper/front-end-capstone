@@ -39,15 +39,16 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Form method="post" action="/logout" className="d-flex">
+                    <Form method="post" action="/logout" className="d-flex align-items-center">
                       <button
                           type="submit"
-                          className="btn btn-link nav-link p-0"
+                          className="btn btn-link nav-link"
                           style={{
                             border: 'none',
                             cursor: 'pointer',
                             outline: 'none',
-                            boxShadow: 'none'
+                            boxShadow: 'none',
+                            padding: '0.5rem 1rem'
                           }}
                       >
                         Logout

@@ -6,6 +6,12 @@ export const registerUser = async (userData) => {
     return await axios.post(`${API_URL}/users/register`, userData);
 };
 
+export const getUserProfile = async (token) => {
+  return axios.get(`${API_URL}/users/profile`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
 export const loginUser = async (userData) => {
     return await axios.post(`${API_URL}/users/login`, userData);
 };
@@ -16,11 +22,6 @@ export const getPlants = async (page = 1, perPage = 10, search = '') => {
     });
 };
 
-export const getUserProfile = async (token) => {
-    return await axios.get(`${API_URL}/users/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-};
 
 export const updateUserProfile = async (token, updateData) => {
     return await axios.put(`${API_URL}/users/update`, updateData, {
