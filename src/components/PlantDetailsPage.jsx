@@ -6,7 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {QRCodeSVG} from 'qrcode.react';
-import {API_URL, likePlant, savePlant} from "../services/api";
+import {API_URL, apiClient, likePlant, savePlant} from "../services/api";
 import './PlantDetailsPage.css';
 
 export async function loader({params}) {
@@ -16,7 +16,7 @@ export async function loader({params}) {
         headers.Authorization = `Bearer ${token}`;
     }
     try {
-        const response = await axios.get(`${API_URL}/plants/${params.id}`, {headers});
+        const response = await apiClient.get(`${API_URL}/plants/${params.id}`, {headers});
         return response.data;
     } catch (error) {
         throw new Response('Error fetching plant details', {status: 500});
@@ -30,7 +30,7 @@ export async function action({params, request}) {
     const formData = await request.formData();
 
     try {
-        const response = await axios.post(
+        const response = await apiClient.post(
             `${API_URL}/plants/${params.id}/comments`,
             formData,
             {
@@ -72,7 +72,7 @@ const PlantDetailsPage = () => {
 
     const fetchComments = async (page = 1) => {
         try {
-            const response = await axios.get(`${API_URL}/plants/${id}/comments`, {
+            const response = await apiClient.get(`${API_URL}/plants/${id}/comments`, {
                 params: {
                     page: page,
                     per_page: commentsPerPage
@@ -105,7 +105,7 @@ const PlantDetailsPage = () => {
     useEffect(() => {
         const fetchPlantDetails = async () => {
             try {
-                const response = await axios.get(`${API_URL}/plants/${id}`);
+                const response = await apiClient.get(`${API_URL}/plants/${id}`);
                 setPlant(response.data);
                 setIsLiked(response.data.is_liked);
                 setIsSaved(response.data.is_saved);
@@ -137,7 +137,7 @@ const PlantDetailsPage = () => {
 
         try {
             await likePlant(id, token);
-            const response = await axios.get(`${API_URL}/plants/${id}`);
+            const response = await apiClient.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
             setIsLiked(originalIsLiked);
@@ -161,7 +161,7 @@ const PlantDetailsPage = () => {
 
         try {
             await savePlant(id, token);
-            const response = await axios.get(`${API_URL}/plants/${id}`);
+            const response = await apiClient.get(`${API_URL}/plants/${id}`);
             setPlant(response.data);
         } catch (error) {
             setIsSaved(originalIsSaved);
