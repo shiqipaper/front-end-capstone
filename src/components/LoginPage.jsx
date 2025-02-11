@@ -48,7 +48,7 @@ const LoginPage = () => {
               type="password"
               name="password"
               id="password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               required
               className="form-control input-field"
             />
