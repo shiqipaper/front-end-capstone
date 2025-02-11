@@ -9,9 +9,20 @@ export const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (!error.response) {
+      return Promise.reject(error);
+    }
+
+
+    const { status } = error.response;
+    const { url } = error.config;
+
+    if (status === 401) {
+      if (url.endsWith('/login') || url.includes('/login')) {
+        return Promise.reject(error);
+      }
+
       localStorage.removeItem('token');
-      // Redirect to login or do any other global handling.
       window.location.href = '/login';
     }
 

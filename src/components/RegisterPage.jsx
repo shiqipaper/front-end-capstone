@@ -26,16 +26,6 @@ export async function action({ request }) {
   }
 }
 
-//   try {
-//     const response = await registerUser(user);
-//     localStorage.setItem('token', response.data.access_token);
-//
-//     return redirect('/');
-//   } catch (error) {
-//     return { error: 'Error during registration' };
-//   }
-// }
-
 const RegisterPage = () => {
   const actionData = useActionData();
   const [password, setPassword] = useState('');
@@ -54,52 +44,89 @@ const RegisterPage = () => {
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <h2>Register</h2>
+        <h1 className="auth-title">Create an Account</h1>
+        <p className="auth-subtitle">
+          Please fill in the form to create an account
+        </p>
+
+        {/* Display any global/form-level errors here */}
+        {actionData?.error && (
+          <div className="auth-error">{actionData.error}</div>
+        )}
+        {passwordError && <div className="auth-error">{passwordError}</div>}
 
         <Form method="post" onSubmit={handleSubmit}>
-          <input
+          <div className="form-group">
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
+            <input
+              id="username"
               type="text"
               name="username"
-              placeholder="Username"
+              className="input-field"
+              placeholder="Choose a username"
               required
-              className="form-control"
-          />
+            />
+          </div>
 
-          <input
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              id="email"
               type="email"
               name="email"
-              placeholder="Email"
+              className="input-field"
+              placeholder="Your email address"
               required
-              className="form-control"
-          />
+            />
+          </div>
 
-          <input
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              id="password"
               type="password"
               name="password"
-              placeholder="Password"
-              required
-              className="form-control"
+              className="input-field"
+              placeholder="Enter a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-          />
+              required
+            />
+          </div>
 
-          <input
+          <div className="form-group">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
               type="password"
               name="confirmPassword"
-              placeholder="Confirm Password"
-              required
-              className="form-control"
+              className="input-field"
+              placeholder="Re-enter your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+              required
+            />
+          </div>
 
-          {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
-          {actionData?.error && <p style={{color: 'red'}}>{actionData.error}</p>}
-
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="auth-button">
             Register
           </button>
         </Form>
+
+        <div className="auth-links">
+          Already have an account?{' '}
+          <a href="/login" className="auth-link">
+            Login
+          </a>
+        </div>
       </div>
     </div>
   );
